@@ -1,37 +1,33 @@
 package application.view.components;
 
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
+import java.awt.FlowLayout;
 import java.awt.LayoutManager;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
-import application.model.ResultTable;
+import application.model.ResultTableModel;
 
 public class TableView extends JPanel {
 
 	private static final long serialVersionUID = 8828350317981591585L;
-	private ResultTable model = null;
+	private ResultTableModel model = null;
 	private JTable table = null;
+	private JScrollPane scrollPane = null;
 
 	public TableView() {
-		initItems();
+		model =  ResultTableModel.getInstance();
+		table = new JTable(model);
+		scrollPane = new JScrollPane(table);
+
+		addItems();
 	}
 
-	private void initItems() {
-		LayoutManager layout = new GridBagLayout();
+	private void addItems() {
+		LayoutManager layout = new FlowLayout();
 		this.setLayout(layout);
 
-		GridBagConstraints c = new GridBagConstraints();
-		c.gridx = 1;
-		c.weightx = 1;
-
-		model = new ResultTable();
-		table = new JTable(model);
-
-		JScrollPane scrollPane = new JScrollPane(table);
 		this.add(scrollPane);
 
 	}

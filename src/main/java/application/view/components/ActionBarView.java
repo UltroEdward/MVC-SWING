@@ -2,47 +2,42 @@ package application.view.components;
 
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.LayoutManager;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import application.view.Constants;
+import application.utils.Constants;
 
 public class ActionBarView extends JPanel {
 
-	private static final long serialVersionUID = 6238419338202523501L;
-
+	private static final long serialVersionUID = 3962286261970694411L;
 	private JButton searchBtn = new JButton(Constants.SEARCH_BUTTON_TEXT);
 	private JTextField searchTxt = new JTextField(5);
 
 	public ActionBarView() {
-		initItems();
-	}
-
-	private void initItems() {
-		LayoutManager layout = new GridBagLayout();
-		this.setLayout(layout);
-
-		GridBagConstraints c = new GridBagConstraints();
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.insets = new Insets(5, 5, 5, 5);
-
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 0;
-		c.weightx = 0.8;
-		this.add(searchTxt, c);
-
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridx = 1;
-		c.weightx = 0;
-		this.add(searchBtn, c);
+		addItems();
 	}
 
 	public JButton getSearchBtn() {
 		return searchBtn;
+	}
+
+	private void addItems() {
+		LayoutManager layout = new GridBagLayout();
+		this.setLayout(layout);
+
+		GridBagConstraints constraints = new GridBagConstraints();
+		constraints.fill = GridBagConstraints.HORIZONTAL;
+
+		constraints.gridx = 0;
+		constraints.weightx = 0.8;
+		this.add(searchTxt, constraints);
+
+		constraints.gridx = 1;
+		constraints.weightx = 0; //make as default
+		this.add(searchBtn, constraints);
 	}
 
 }

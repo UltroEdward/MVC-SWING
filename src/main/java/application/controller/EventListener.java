@@ -2,11 +2,11 @@ package application.controller;
 
 import java.util.List;
 
-import application.model.Result;
+import application.model.ResultModel;
 
 public interface EventListener {
 
-	public List<Result> getData();
+	public List<ResultModel> getData();
 
-	public void populateData(List<Result> data);
+	public void populateData(List<ResultModel> data);
 }

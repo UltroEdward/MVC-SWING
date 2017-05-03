@@ -1,5 +1,6 @@
 package application.view;
 
+import java.awt.Dimension;
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridBagConstraints;
@@ -9,49 +10,70 @@ import java.awt.LayoutManager;
 
 import javax.swing.JFrame;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import application.utils.Constants;
 import application.view.components.ActionBarView;
 import application.view.components.TableView;
 
 public class MainFrameView extends JFrame {
 
+	private static final Logger LOG = LoggerFactory.getLogger(MainFrameView.class);
 	private static final long serialVersionUID = 4805280124968896690L;
 
-	public TableView table = null;
-	public ActionBarView bar = null;
+	private final TableView tableView;
+	private final ActionBarView actionBarView;
 
 	public MainFrameView() {
-		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		LOG.debug("init main frame...");
+		tableView = new TableView();
+		actionBarView = new ActionBarView();
 
+		setUpFrame();
+		initItems();
+	}
+
+	public TableView getTableBlock() {
+		return tableView;
+	}
+
+	public ActionBarView getActionBarBlock() {
+		return actionBarView;
+	}
+
+	private void setUpFrame() {
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.setVisible(true);
+		this.setTitle(Constants.APP_HEADER);
+		Dimension bounds = new Dimension(500, 600);
+		this.setMinimumSize(bounds);
+		this.setLocationRelativeTo(null);
+
+		// set frame size as half of the screen
+		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+		int width = gd.getDisplayMode().getWidth() / 3;
+		int height = gd.getDisplayMode().getHeight() / 3;
+		this.setSize(width, height);
+		LOG.debug(String.format("Init frame size: %d x %d", width, height));
+	}
+
+	private void initItems() {
 		LayoutManager layout = new GridBagLayout();
 		this.setLayout(layout);
-		this.setLocationRelativeTo(null);
-		this.setVisible(true);
-
-		table = new TableView();
-		bar = new ActionBarView();
 
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.insets = new Insets(5, 5, 5, 5);
 
-		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
 		c.weightx = 0.8;
-		bar = new ActionBarView();
-		this.add(bar, c);
+		this.add(actionBarView, c);
 
-		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
 		c.gridy = 1;
 		c.weightx = 0;
-		table = new TableView();
-		this.add(table, c);
-
-		this.getContentPane().setLayout(layout);
-
-		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-		int width = gd.getDisplayMode().getWidth() / 2;
-		int height = gd.getDisplayMode().getHeight() / 2;
-		this.setSize(width, height);
+		this.add(tableView, c);
 	}
+
 }
