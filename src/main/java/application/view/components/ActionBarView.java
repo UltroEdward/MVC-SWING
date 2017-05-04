@@ -23,6 +23,10 @@ public class ActionBarView extends JPanel {
 	public JButton getSearchBtn() {
 		return searchBtn;
 	}
+	
+	public String getSearchTxtValue() {
+		return searchTxt.getText();
+	}
 
 	private void addItems() {
 		LayoutManager layout = new GridBagLayout();

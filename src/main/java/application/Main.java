@@ -1,5 +1,9 @@
 package application;
 
+import java.lang.reflect.InvocationTargetException;
+
+import javax.swing.SwingUtilities;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,8 +27,19 @@ public class Main {
 	}
 
 	public static void main(String[] args) {
-		new Main();
-		LOG.info("Application is started");
+		try {
+			SwingUtilities.invokeAndWait(new Runnable() {
+			    @Override
+			    public void run() {
+			    	new Main(); 
+			    	LOG.info("Application is started");
+			    }
+			});
+		} catch (Exception e) {
+			LOG.info("Uh-oh, smth wrong!");
+		}
+
+		
 	}
 
 }

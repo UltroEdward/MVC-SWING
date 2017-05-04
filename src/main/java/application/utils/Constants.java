@@ -1,6 +1,6 @@
 package application.utils;
 
-public class Constants {
+public final class Constants {
 
 	/**
 	 * Application labels
@@ -19,4 +19,13 @@ public class Constants {
 	public static final int MAX_TITLE_LENGTH = 100;
 	public static final int MAX_RESULTS_COUNT_TO_SHOW = 10;
 	public static final boolean IS_COLUMNS_EDITABLE = true;
+	public static final String SEPARATOR = System.getProperty("line.separator");
+
+	/**
+	 * HTTP tools configuration
+	 */
+	public static final int CONNECTION_REQUEST_TIMEOUT_SEC = 60;
+	public static final int CONNECTION_TIMEOUT_SEC = 60;
+	public static final String SEARCH_BASE_URL = "https://www.google.by/search?q=";
+
 }

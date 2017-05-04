@@ -34,7 +34,7 @@ public class ResultModel {
 	}
 
 	public void setTitle(String title) {
-		String cleanTitle = url.trim();
+		String cleanTitle = title.trim();
 		if (cleanTitle.length() > Constants.MAX_TITLE_LENGTH) {
 			cleanTitle = cleanTitle.substring(0, Constants.MAX_TITLE_LENGTH);
 		}
