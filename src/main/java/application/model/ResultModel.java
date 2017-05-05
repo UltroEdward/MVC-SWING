@@ -1,6 +1,6 @@
 package application.model;
 
-import application.utils.Constants;
+import application.core.Constants;
 
 public class ResultModel {
 

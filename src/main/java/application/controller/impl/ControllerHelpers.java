@@ -1,8 +1,11 @@
-package application.controller;
+package application.controller.impl;
 
 import java.util.Arrays;
 
-class ControllerHelpers {
+public class ControllerHelpers {
+
+	private ControllerHelpers() {
+	}
 
 	public static String generateSearchUrl(String baseUrl, String... searchParams) {
 		StringBuilder builder = new StringBuilder();

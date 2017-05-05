@@ -9,16 +9,14 @@ import javax.swing.table.AbstractTableModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import application.utils.Constants;
+import application.core.Constants;
 
 /**
- * 
  * @author Horseman
  * 
  *         JTable view can't work without predefined implementation of
- *         AbstractTableModel, so this Class is singleton to safe share in for
+ *         AbstractTableModel, so this Class is singleton to safe share for
  *         Controller and View
- *
  */
 public class ResultTableModel extends AbstractTableModel {
 
@@ -30,7 +28,8 @@ public class ResultTableModel extends AbstractTableModel {
 	private static final List<ResultModel> results = new ArrayList<>(Constants.MAX_RESULTS_COUNT_TO_SHOW);
 
 	private enum Column {
-		NUMBER(0, Constants.TABLE_HEADER_NUMBER), URL(1, Constants.TABLE_HEADER_URL), TITLE(2, Constants.TABLE_HEADER_TITLE);
+		NUMBER(0, Constants.TABLE_HEADER_NUMBER), URL(1, Constants.TABLE_HEADER_URL), TITLE(2,
+				Constants.TABLE_HEADER_TITLE);
 
 		private int order;
 		private String name;
@@ -94,7 +93,8 @@ public class ResultTableModel extends AbstractTableModel {
 	public String getColumnName(int column) {
 		int colCount = getColumnCount();
 		if (colCount < column) {
-			LOG.error(String.format("Trying to get column [%d] that out of scope, colum size is: [%d]", column, colCount));
+			LOG.error(String.format("Trying to get column [%d] that out of scope, colum size is: [%d]", column,
+					colCount));
 			return "";
 		}
 		return getColumn(column).getName();
@@ -106,7 +106,7 @@ public class ResultTableModel extends AbstractTableModel {
 	}
 
 	public boolean isCellEditable(int arg0, int arg1) {
-		return true;
+		return Constants.IS_COLUMNS_EDITABLE;
 	}
 
 	@Override
@@ -176,12 +176,14 @@ public class ResultTableModel extends AbstractTableModel {
 		throw new IllegalArgumentException("Desired column is not exists: " + columnNumber);
 	}
 
+	//TODO: need refactor logic
 	private Optional<ResultModel> getRow(int row) {
 		int rowCount = results.size();
 		if (row > rowCount || results.isEmpty()) {
 			if (results.size() < Constants.MAX_RESULTS_COUNT_TO_SHOW) {
 				results.add(new ResultModel());
-				LOG.info(String.format("Trying to get row [%d] that out of scope, new one is added: [%d]", row, rowCount));
+				LOG.info(String.format("Trying to get row [%d] that out of scope, new one is added: [%d]", row,
+						rowCount));
 			}
 		}
 		return Optional.of(results.get(row));

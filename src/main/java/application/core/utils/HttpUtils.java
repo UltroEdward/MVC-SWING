@@ -1,4 +1,4 @@
-package application.utils;
+package application.core.utils;
 
 import java.io.IOException;
 
@@ -13,6 +13,8 @@ import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import application.core.Constants;
 
 public class HttpUtils {
 
@@ -33,8 +35,7 @@ public class HttpUtils {
 	}
 
 	public static HttpResponse doGet(String url) {
-		return doGet(url, new BasicHeader("user-agent",
-				"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.96 Safari/537.36"));
+		return doGet(url, new BasicHeader(Constants.DEFAULT_HEADER_KEY, Constants.DEFAULT_HEADER_VALUE));
 	}
 
 	public static HttpResponse doGet(String url, Header header) {

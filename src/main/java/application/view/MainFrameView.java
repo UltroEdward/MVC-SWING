@@ -1,8 +1,6 @@
 package application.view;
 
 import java.awt.Dimension;
-import java.awt.GraphicsDevice;
-import java.awt.GraphicsEnvironment;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
@@ -13,7 +11,7 @@ import javax.swing.JFrame;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import application.utils.Constants;
+import application.core.Constants;
 import application.view.components.ActionBarView;
 import application.view.components.TableView;
 
@@ -26,12 +24,13 @@ public class MainFrameView extends JFrame {
 	private final ActionBarView actionBarView;
 
 	public MainFrameView() {
-		LOG.debug("init main frame...");
+		LOG.info("Init main frame...");
 		tableView = new TableView();
 		actionBarView = new ActionBarView();
 
 		setUpFrame();
 		initItems();
+		LOG.info("Initialization of main frame finished");
 	}
 
 	public TableView getTableBlock() {
@@ -46,16 +45,10 @@ public class MainFrameView extends JFrame {
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setVisible(true);
 		this.setTitle(Constants.APP_HEADER);
-		Dimension bounds = new Dimension(500, 600);
-		this.setMinimumSize(bounds);
 		this.setLocationRelativeTo(null);
 
-		// set frame size as half of the screen
-		GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-		int width = gd.getDisplayMode().getWidth() / 3;
-		int height = gd.getDisplayMode().getHeight() / 3;
-		this.setSize(width, height);
-		LOG.debug(String.format("Init frame size: %d x %d", width, height));
+		Dimension bounds = new Dimension(500, 600);
+		this.setMinimumSize(bounds);
 	}
 
 	private void initItems() {
@@ -74,6 +67,8 @@ public class MainFrameView extends JFrame {
 		c.gridy = 1;
 		c.weightx = 0;
 		this.add(tableView, c);
+
+		pack();
 	}
 
 }

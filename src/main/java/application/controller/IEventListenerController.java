@@ -4,7 +4,7 @@ import java.util.List;
 
 import application.model.ResultModel;
 
-public interface IEventListener {
+public interface IEventListenerController {
 
 	public List<ResultModel> getData();
 

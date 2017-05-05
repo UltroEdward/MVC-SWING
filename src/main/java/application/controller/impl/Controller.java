@@ -1,25 +1,28 @@
-package application.controller;
+package application.controller.impl;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.http.HttpResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import application.core.processor.IStreamParser;
-import application.core.processor.impl.StremRegExpParser;
+import application.controller.IEventListenerController;
+import application.core.Constants;
+import application.core.processor.AbstarctTableWorker;
+import application.core.processor.impl.RegExpTableWorker;
+import application.core.utils.HttpUtils;
 import application.model.ResultModel;
 import application.model.ResultTableModel;
-import application.utils.Constants;
-import application.utils.HttpUtils;
 import application.view.MainFrameView;
 
-public class Controller implements IEventListener {
+public class Controller implements IEventListenerController {
 
+	private static final Logger LOG = LoggerFactory.getLogger(Controller.class);
 	private ResultTableModel model = null;
 	private MainFrameView view = null;
 
@@ -31,13 +34,13 @@ public class Controller implements IEventListener {
 
 	public void initController() {
 		view.getActionBarBlock().getSearchBtn().addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
+
+			public void actionPerformed(ActionEvent event) {
 				List<ResultModel> data = getData();
 				populateData(data);
 			}
 		});
-	}
+	};
 
 	@Override
 	public List<ResultModel> getData() {
@@ -46,22 +49,18 @@ public class Controller implements IEventListener {
 		String[] inputData = view.getActionBarBlock().getSearchTxtValue().split(" ");
 		String url = ControllerHelpers.generateSearchUrl(Constants.SEARCH_BASE_URL, inputData);
 		HttpResponse resp = HttpUtils.doGet(url);
+		InputStreamReader inputStream = null;
+		AbstarctTableWorker parser = null;
 
-		try (InputStreamReader inputStream = new InputStreamReader(resp.getEntity().getContent(), StandardCharsets.UTF_8);) {
-			new Runnable() {
-				@Override
-				public void run() {
-					IStreamParser parser = new StremRegExpParser();
-					List<ResultModel> resultsLoc = parser.getResults(inputStream, Constants.MAX_RESULTS_COUNT_TO_SHOW);
-					results.addAll(resultsLoc);
-				}
-			}.run();
-		} catch (IOException e) {
-			e.printStackTrace();
+		try {
+			inputStream = new InputStreamReader(resp.getEntity().getContent(), StandardCharsets.UTF_8);
+			parser = new RegExpTableWorker(inputStream, Constants.MAX_RESULTS_COUNT_TO_SHOW, this);
+			parser.execute();
+		} catch (Exception e) {
+			LOG.error("Some error happens while updating table: " + e.getMessage());
 		}
 
 		return results;
-
 	}
 
 	@Override

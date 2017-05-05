@@ -29,6 +29,5 @@ public class TableView extends JPanel {
 		this.setLayout(layout);
 
 		this.add(scrollPane);
-
 	}
 }
