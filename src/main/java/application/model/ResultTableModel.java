@@ -25,7 +25,7 @@ public class ResultTableModel extends AbstractTableModel {
 	private static final Logger LOG = LoggerFactory.getLogger(ResultTableModel.class);
 
 	private static final long serialVersionUID = -1630622466946080960L;
-	private static final List<ResultModel> results = new ArrayList<>(Constants.MAX_RESULTS_COUNT_TO_SHOW);
+	private static List<ResultModel> results = new ArrayList<>(Constants.MAX_RESULTS_COUNT_TO_SHOW);
 
 	private enum Column {
 		NUMBER(0, Constants.TABLE_HEADER_NUMBER), URL(1, Constants.TABLE_HEADER_URL), TITLE(2,
@@ -69,8 +69,11 @@ public class ResultTableModel extends AbstractTableModel {
 		results.stream().forEach(e -> addData(e));
 	}
 
+	// TODO: need to avoid fireTableDataChanged, need to refactor
 	public void clearData() {
 		results.clear();
+		results = new ArrayList<>(Constants.MAX_RESULTS_COUNT_TO_SHOW);
+		fireTableDataChanged();
 	}
 
 	public void addData(ResultModel result) {
@@ -176,7 +179,7 @@ public class ResultTableModel extends AbstractTableModel {
 		throw new IllegalArgumentException("Desired column is not exists: " + columnNumber);
 	}
 
-	//TODO: need refactor logic
+	// TODO: need refactor logic
 	private Optional<ResultModel> getRow(int row) {
 		int rowCount = results.size();
 		if (row > rowCount || results.isEmpty()) {
