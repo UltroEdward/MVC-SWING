@@ -19,11 +19,10 @@ public class Main {
 				ResultTableModel model = ResultTableModel.getInstance();
 				MainFrameView view = new MainFrameView();
 				new Controller(model, view);
-				LOG.info("Application is started");
+				LOG.info("Application is started on EDT thread: " + SwingUtilities.isEventDispatchThread());
 			});
 		} catch (Exception e) {
-			LOG.info(String.format("Uh-oh, smth wrong! Getting exception: %s", e.getMessage()));
-			LOG.error("Error is:" + e.getStackTrace());
+			LOG.error(String.format("Uh-oh, smth wrong! Getting exception: %s, trace + %s", e.getMessage(), e.getStackTrace()));
 		}
 
 	}

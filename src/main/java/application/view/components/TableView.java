@@ -9,15 +9,13 @@ import javax.swing.JTable;
 
 import application.model.ResultTableModel;
 
-public class TableView extends JPanel {
+public final class TableView extends JPanel {
 
 	private static final long serialVersionUID = 8828350317981591585L;
-	private ResultTableModel model = null;
 	private JTable table = null;
 	private JScrollPane scrollPane = null;
 
-	public TableView() {
-		model =  ResultTableModel.getInstance();
+	public TableView(ResultTableModel model) {
 		table = new JTable(model);
 		scrollPane = new JScrollPane(table);
 

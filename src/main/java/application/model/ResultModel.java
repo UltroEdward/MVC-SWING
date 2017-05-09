@@ -1,6 +1,6 @@
 package application.model;
 
-import application.core.Constants;
+import static application.core.Constants.*;
 
 public class ResultModel {
 
@@ -22,8 +22,8 @@ public class ResultModel {
 
 	public void setUrl(String url) {
 		String cleanUrl = url.trim();
-		if (cleanUrl.length() > Constants.MAX_URL_LENGTH) {
-			cleanUrl = cleanUrl.substring(0, Constants.MAX_URL_LENGTH);
+		if (cleanUrl.length() > MAX_URL_LENGTH) {
+			cleanUrl = cleanUrl.substring(0, MAX_URL_LENGTH);
 		}
 
 		this.url = cleanUrl;
@@ -35,8 +35,8 @@ public class ResultModel {
 
 	public void setTitle(String title) {
 		String cleanTitle = title.trim();
-		if (cleanTitle.length() > Constants.MAX_TITLE_LENGTH) {
-			cleanTitle = cleanTitle.substring(0, Constants.MAX_TITLE_LENGTH);
+		if (cleanTitle.length() > MAX_TITLE_LENGTH) {
+			cleanTitle = cleanTitle.substring(0, MAX_TITLE_LENGTH);
 		}
 
 		this.title = cleanTitle;
@@ -45,12 +45,11 @@ public class ResultModel {
 	@Override
 	public String toString() {
 		StringBuilder result = new StringBuilder();
-		String NEW_LINE = System.getProperty("line.separator");
 
-		result.append(this.getClass().getName() + " Object {" + NEW_LINE);
-		result.append(" Number: " + getNumber() + NEW_LINE);
-		result.append(" URL: " + getUrl() + NEW_LINE);
-		result.append(" Title: " + getTitle() + NEW_LINE);
+		result.append(this.getClass().getName() + " Object {" + SEPARATOR);
+		result.append(" Number: " + getNumber() + SEPARATOR);
+		result.append(" URL: " + getUrl() + SEPARATOR);
+		result.append(" Title: " + getTitle() + SEPARATOR);
 		result.append("}");
 
 		return result.toString();

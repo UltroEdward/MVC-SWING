@@ -2,6 +2,10 @@ package application.core;
 
 public final class Constants {
 
+	private Constants() {
+
+	}
+
 	/**
 	 * Application labels
 	 */
@@ -17,7 +21,7 @@ public final class Constants {
 	public static final int MAX_URL_LENGTH = 50;
 	public static final int MAX_TITLE_LENGTH = 50;
 	public static final int MAX_RESULTS_COUNT_TO_SHOW = 10;
-	public static final boolean IS_COLUMNS_EDITABLE = false;
+	public static final boolean IS_COLUMNS_EDITABLE = true;
 	public static final String MISSING_DATA_PLACEHOLDER = "No data";
 	public static final String SEPARATOR = System.getProperty("line.separator");
 

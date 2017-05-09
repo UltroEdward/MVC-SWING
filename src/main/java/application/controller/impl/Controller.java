@@ -1,5 +1,7 @@
 package application.controller.impl;
 
+import static application.core.Constants.*;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.InputStreamReader;
@@ -12,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import application.controller.IEventListenerController;
-import application.core.Constants;
 import application.core.processor.AbstarctTableWorker;
 import application.core.processor.impl.RegExpTableWorker;
 import application.core.utils.HttpUtils;
@@ -32,7 +33,7 @@ public class Controller implements IEventListenerController {
 		initController();
 	}
 
-	public void initController() {
+	public final void initController() {
 		view.getActionBarBlock().getSearchBtn().addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent event) {
@@ -47,14 +48,15 @@ public class Controller implements IEventListenerController {
 		final List<ResultModel> results = new ArrayList<>();
 
 		String[] inputData = view.getActionBarBlock().getSearchTxtValue().split(" ");
-		String url = ControllerHelpers.generateSearchUrl(Constants.SEARCH_BASE_URL, inputData);
+		String url = ControllerHelpers.generateSearchUrl(SEARCH_BASE_URL, inputData);
 		HttpResponse resp = HttpUtils.doGet(url);
+		
 		InputStreamReader inputStream = null;
 		AbstarctTableWorker parser = null;
 
 		try {
 			inputStream = new InputStreamReader(resp.getEntity().getContent(), StandardCharsets.UTF_8);
-			parser = new RegExpTableWorker(inputStream, Constants.MAX_RESULTS_COUNT_TO_SHOW, this);
+			parser = new RegExpTableWorker(inputStream, MAX_RESULTS_COUNT_TO_SHOW, this);
 			parser.execute();
 		} catch (Exception e) {
 			LOG.error("Some error happens while updating table: " + e.getMessage());

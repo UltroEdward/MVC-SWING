@@ -14,7 +14,7 @@ import org.apache.http.message.BasicHeader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import application.core.Constants;
+import static application.core.Constants.*;
 
 public class HttpUtils {
 
@@ -26,8 +26,8 @@ public class HttpUtils {
 
 	static {
 		RequestConfig.Builder requestBuilder = RequestConfig.custom();
-		requestBuilder = requestBuilder.setConnectTimeout(Constants.CONNECTION_TIMEOUT_SEC * 1000);
-		requestBuilder = requestBuilder.setConnectionRequestTimeout(Constants.CONNECTION_REQUEST_TIMEOUT_SEC * 1000);
+		requestBuilder = requestBuilder.setConnectTimeout(CONNECTION_TIMEOUT_SEC * 1000);
+		requestBuilder = requestBuilder.setConnectionRequestTimeout(CONNECTION_REQUEST_TIMEOUT_SEC * 1000);
 
 		HttpClientBuilder builder = HttpClientBuilder.create();
 		builder.setDefaultRequestConfig(requestBuilder.build());
@@ -35,7 +35,7 @@ public class HttpUtils {
 	}
 
 	public static HttpResponse doGet(String url) {
-		return doGet(url, new BasicHeader(Constants.DEFAULT_HEADER_KEY, Constants.DEFAULT_HEADER_VALUE));
+		return doGet(url, new BasicHeader(DEFAULT_HEADER_KEY, DEFAULT_HEADER_VALUE));
 	}
 
 	public static HttpResponse doGet(String url, Header header) {

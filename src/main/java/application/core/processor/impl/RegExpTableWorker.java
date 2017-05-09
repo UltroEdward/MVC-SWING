@@ -14,9 +14,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import application.controller.IEventListenerController;
-import application.core.Constants;
 import application.core.processor.AbstarctTableWorker;
 import application.model.ResultModel;
+
+import static application.core.Constants.*;
 
 public class RegExpTableWorker extends AbstarctTableWorker {
 
@@ -42,7 +43,7 @@ public class RegExpTableWorker extends AbstarctTableWorker {
 		List<String> titles = new ArrayList<>();
 
 		if (limitRecords < 0) {
-			limitRecords = Constants.MAX_RESULTS_COUNT_TO_SHOW;
+			limitRecords = MAX_RESULTS_COUNT_TO_SHOW;
 		}
 
 		BufferedReader br = new BufferedReader(inputStream);
@@ -74,8 +75,7 @@ public class RegExpTableWorker extends AbstarctTableWorker {
 		}
 
 		LOG.info("Data processed is done");
-		LOG.info(String.format("Items found: %sURL [%s], %sTITLE [%s]", Constants.SEPARATOR, urls, Constants.SEPARATOR,
-				titles));
+		LOG.info(String.format("Items found: %sURL [%s], %sTITLE [%s]", SEPARATOR, urls, SEPARATOR, titles));
 
 		// cut results according to @limit value
 		if (urls.size() > limitRecords) {
@@ -96,8 +96,7 @@ public class RegExpTableWorker extends AbstarctTableWorker {
 			LOG.error("No results founded, result set is empty");
 			return results;
 		} else if (urls.size() != titles.size()) {
-			LOG.error(String.format(
-					"Some data is missing, check data-processor for correct parsing, results is: urls:%d, titles:%d",
+			LOG.error(String.format("Some data is missing, check data-processor for correct parsing, results is: urls:%d, titles:%d",
 					urls.size(), titles.size()));
 		}
 
@@ -107,7 +106,7 @@ public class RegExpTableWorker extends AbstarctTableWorker {
 			result.setUrl(urls.get(i));
 
 			if (i > titles.size() - 1) {
-				result.setTitle(Constants.MISSING_DATA_PLACEHOLDER);
+				result.setTitle(MISSING_DATA_PLACEHOLDER);
 			} else {
 				result.setTitle(titles.get(i));
 			}

@@ -43,7 +43,6 @@ public abstract class AbstarctTableWorker extends SwingWorker<List<ResultModel>,
 	@Override
 	protected void done() {
 		try {
-			// this.tableModel.addData(this.get());
 			controller.populateData(this.get());
 		} catch (InterruptedException | ExecutionException ex) {
 			LOG.error("Data process failed " + ex.getMessage());

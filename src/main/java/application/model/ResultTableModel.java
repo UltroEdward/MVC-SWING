@@ -9,7 +9,7 @@ import javax.swing.table.AbstractTableModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import application.core.Constants;
+import static application.core.Constants.*;
 
 /**
  * @author Horseman
@@ -18,18 +18,17 @@ import application.core.Constants;
  *         AbstractTableModel, so this Class is singleton to safe share for
  *         Controller and View
  */
-public class ResultTableModel extends AbstractTableModel {
+public final class ResultTableModel extends AbstractTableModel {
 
 	private static volatile ResultTableModel instance = null;
 
 	private static final Logger LOG = LoggerFactory.getLogger(ResultTableModel.class);
-
 	private static final long serialVersionUID = -1630622466946080960L;
-	private static List<ResultModel> results = new ArrayList<>(Constants.MAX_RESULTS_COUNT_TO_SHOW);
+
+	private static List<ResultModel> results = new ArrayList<>();
 
 	private enum Column {
-		NUMBER(0, Constants.TABLE_HEADER_NUMBER), URL(1, Constants.TABLE_HEADER_URL), TITLE(2,
-				Constants.TABLE_HEADER_TITLE);
+		NUMBER(0, TABLE_HEADER_NUMBER), URL(1, TABLE_HEADER_URL), TITLE(2, TABLE_HEADER_TITLE);
 
 		private int order;
 		private String name;
@@ -49,6 +48,9 @@ public class ResultTableModel extends AbstractTableModel {
 
 	}
 
+	private ResultTableModel() {
+	}
+
 	public static ResultTableModel getInstance() {
 		ResultTableModel localInstance = instance;
 		if (localInstance == null) {
@@ -62,54 +64,57 @@ public class ResultTableModel extends AbstractTableModel {
 		return instance;
 	}
 
-	private ResultTableModel() {
+	/**
+	 * Method call for each element method 'addData(ResultModel result)' instead
+	 * of using 'results.addAll(results);' as some more logic can be implemented
+	 * inside addData(ResultModel result
+	 * 
+	 * @param results:
+	 *            adding new data to table
+	 */
+	public void addData(List<ResultModel> resultsToAdd) {
+		for (int i = 0; i < resultsToAdd.size() & results.size() < MAX_RESULTS_COUNT_TO_SHOW; i++) {
+			addData(resultsToAdd.get(i));
+		}
 	}
 
-	public void addData(List<ResultModel> results) {
-		results.stream().forEach(e -> addData(e));
-	}
-
-	// TODO: need to avoid fireTableDataChanged, need to refactor
 	public void clearData() {
 		results.clear();
-		results = new ArrayList<>(Constants.MAX_RESULTS_COUNT_TO_SHOW);
 		fireTableDataChanged();
 	}
 
-	public void addData(ResultModel result) {
-		results.add(result);
-		fireTableDataChanged();
-	}
-
+	@Override
 	public int getRowCount() {
 		int count = results.size();
 		LOG.debug("Rows count:" + count);
 		return count;
 	}
 
+	@Override
 	public int getColumnCount() {
 		int count = Column.values().length;
 		LOG.debug("Columns count:" + count);
 		return count;
 	}
 
+	@Override
 	public String getColumnName(int column) {
 		int colCount = getColumnCount();
 		if (colCount < column) {
-			LOG.error(String.format("Trying to get column [%d] that out of scope, colum size is: [%d]", column,
-					colCount));
+			LOG.error(String.format("Trying to get column [%d] that out of scope, colum size is: [%d]", column, colCount));
 			return "";
 		}
 		return getColumn(column).getName();
 	}
 
+	@Override
 	public Class<?> getColumnClass(int arg0) {
 		// TODO: think about using proper data types
 		return String.class;
 	}
 
 	public boolean isCellEditable(int arg0, int arg1) {
-		return Constants.IS_COLUMNS_EDITABLE;
+		return IS_COLUMNS_EDITABLE;
 	}
 
 	@Override
@@ -138,16 +143,17 @@ public class ResultTableModel extends AbstractTableModel {
 		return value;
 	}
 
+	@Override
 	public void setValueAt(Object data, int row, int column) {
 
-		if (!Constants.IS_COLUMNS_EDITABLE) {
+		if (!IS_COLUMNS_EDITABLE) {
 			LOG.info("Setting data - disabled");
 			return;
 		}
 
 		Optional<ResultModel> result = getRow(row);
 		if (!result.isPresent()) {
-			LOG.error(String.format("Can't save result, cell {%d ; %d} is not presented:", row, column));
+			LOG.error(String.format("Can't save result, cell {%d ; %d} is not presented", row, column));
 			return;
 		}
 
@@ -170,6 +176,11 @@ public class ResultTableModel extends AbstractTableModel {
 
 	}
 
+	private void addData(ResultModel result) {
+		results.add(result);
+		fireTableRowsInserted(results.size() - 1, results.size());
+	}
+
 	private Column getColumn(int columnNumber) {
 		for (Column column : Column.values()) {
 			if (column.getOrder() == columnNumber) {
@@ -179,16 +190,28 @@ public class ResultTableModel extends AbstractTableModel {
 		throw new IllegalArgumentException("Desired column is not exists: " + columnNumber);
 	}
 
-	// TODO: need refactor logic
 	private Optional<ResultModel> getRow(int row) {
 		int rowCount = results.size();
-		if (row > rowCount || results.isEmpty()) {
-			if (results.size() < Constants.MAX_RESULTS_COUNT_TO_SHOW) {
-				results.add(new ResultModel());
-				LOG.info(String.format("Trying to get row [%d] that out of scope, new one is added: [%d]", row,
-						rowCount));
-			}
+
+		if (row < 0) {
+			LOG.error(String.format("Trying to get illigal row [%d] that out of scope", row));
+			return Optional.empty();
 		}
+
+		// if 'row == results.size() + 1' - new item should be added to table
+		if (row > results.size() + 1) {
+			LOG.error(String.format("Trying to get row [%d] that out of scope as actual size is [%d]", row, rowCount));
+			return Optional.empty();
+		}
+
+		if (row == results.size() + 1) {
+			LOG.info(String.format("Increasing table size, as new result is added"));
+			results.add(new ResultModel());
+			fireTableRowsInserted(results.size() - 1, results.size());
+			return Optional.of(results.get(row));
+		}
+
+		// value of already existing row
 		return Optional.of(results.get(row));
 	}
 

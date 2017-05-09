@@ -8,12 +8,12 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import application.core.Constants;
+import static application.core.Constants.*;
 
 public class ActionBarView extends JPanel {
 
 	private static final long serialVersionUID = 3962286261970694411L;
-	private JButton searchBtn = new JButton(Constants.SEARCH_BUTTON_TEXT);
+	private JButton searchBtn = new JButton(SEARCH_BUTTON_TEXT);
 	private JTextField searchTxt = new JTextField();
 
 	public ActionBarView() {

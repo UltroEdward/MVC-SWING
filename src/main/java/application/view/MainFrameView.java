@@ -11,11 +11,13 @@ import javax.swing.JFrame;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import application.core.Constants;
+import application.model.ResultTableModel;
 import application.view.components.ActionBarView;
 import application.view.components.TableView;
 
-public class MainFrameView extends JFrame {
+import static application.core.Constants.*;
+
+public final class MainFrameView extends JFrame {
 
 	private static final Logger LOG = LoggerFactory.getLogger(MainFrameView.class);
 	private static final long serialVersionUID = 4805280124968896690L;
@@ -25,7 +27,8 @@ public class MainFrameView extends JFrame {
 
 	public MainFrameView() {
 		LOG.info("Init main frame...");
-		tableView = new TableView();
+
+		tableView = new TableView(ResultTableModel.getInstance());
 		actionBarView = new ActionBarView();
 
 		setUpFrame();
@@ -44,7 +47,7 @@ public class MainFrameView extends JFrame {
 	private void setUpFrame() {
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setVisible(true);
-		this.setTitle(Constants.APP_HEADER);
+		this.setTitle(APP_HEADER);
 		this.setLocationRelativeTo(null);
 
 		Dimension bounds = new Dimension(500, 600);
